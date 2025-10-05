@@ -25,7 +25,7 @@ class _TodoScreen extends State<TodoScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<TaskController>().loadTasks();
     });
   }
@@ -167,7 +167,9 @@ class _TodoScreen extends State<TodoScreen> {
           ElevatedButton(
             onPressed: () async {
               if (searchController.text.isNotEmpty) {
-                await context.read<TaskController>().searchTasks(searchController.text);
+                await context.read<TaskController>().searchTasks(
+                  searchController.text,
+                );
                 Navigator.pop(context);
               }
             },
@@ -249,11 +251,31 @@ class _TodoScreen extends State<TodoScreen> {
             ),
             SizedBox(
               height: 60,
-              child: const Center(
-                child: Text(
-                  'Your tasks list',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Center(
+                    child: Text(
+                      'Your tasks list',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: IconButton(
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Help"),
+                          content: const Text(
+                            "Swipe a task left to edit or delete",
+                          ),
+                        ),
+                      ),
+                      icon: Icon(Icons.help),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
